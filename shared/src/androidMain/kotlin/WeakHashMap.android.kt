@@ -1,46 +1,50 @@
 import java.util.WeakHashMap
 
-actual class WeakHashMap<K, V> : MutableMap<K, V> {
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
+actual class WeakHashMap<K, V> {
     private val weakHashMap = WeakHashMap<K, V>()
 
-    actual override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
-        get() = weakHashMap.entries
-    actual override val keys
+    actual val entries: MutableSet<MutableEntry<K, V>>
+        get() = weakHashMap.entries.map {
+            MutableEntry(this, it.key, it.value)
+        }.toMutableSet()
+
+    actual val keys: MutableSet<K>
         get() = weakHashMap.keys
-    actual override val size: Int
+    actual val size: Int
         get() = weakHashMap.size
-    actual override val values: MutableCollection<V>
+    actual val values: MutableCollection<V>
         get() = weakHashMap.values
 
-    actual override fun isEmpty(): Boolean {
+    actual fun isEmpty(): Boolean {
         return weakHashMap.isEmpty()
     }
 
-    actual override fun get(key: K): V? {
+    actual operator fun get(key: K): V? {
         return weakHashMap[key]
     }
 
-    actual override fun containsValue(value: V): Boolean {
+    actual fun containsValue(value: V): Boolean {
         return weakHashMap.containsValue(value)
     }
 
-    actual override fun containsKey(key: K): Boolean {
+    actual fun containsKey(key: K): Boolean {
         return weakHashMap.containsKey(key)
     }
 
-    override fun clear() {
+    actual fun clear() {
         weakHashMap.clear()
     }
 
-    override fun remove(key: K): V? {
+    actual fun remove(key: K): V? {
         return weakHashMap.remove(key)
     }
 
-    override fun putAll(from: Map<out K, V>) {
+    actual fun putAll(from: Map<out K, V>) {
         weakHashMap.putAll(from)
     }
 
-    override fun put(key: K, value: V): V? {
+    actual operator fun set(key: K, value: V): V? {
         return weakHashMap.put(key, value)
     }
 }

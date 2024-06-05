@@ -1,13 +1,27 @@
-expect class WeakHashMap<K, V> : MutableMap<K, V> {
-    override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
-    override val keys: MutableSet<K>
-    override val size: Int
-    override val values: MutableCollection<V>
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
+expect class WeakHashMap<K, V> {
+    val entries: MutableSet<MutableEntry<K, V>>
+    val keys: MutableSet<K>
+    val size: Int
+    val values: MutableCollection<V>
 
-    override fun isEmpty(): Boolean
+    fun isEmpty(): Boolean
 
-    override fun get(key: K): V?
+    operator fun get(key: K): V?
 
-    override fun containsValue(value: V): Boolean
-    override fun containsKey(key: K): Boolean
+    fun containsValue(value: V): Boolean
+    fun containsKey(key: K): Boolean
+
+    fun clear()
+    operator fun set(key: K, value: V): V?
+    fun putAll(from: Map<out K, V>)
+    fun remove(key: K): V?
+}
+
+class MutableEntry<K, V>(private val map: WeakHashMap<K, V>, override val key: K, override val value: V) : MutableMap.MutableEntry<K, V> {
+    override fun setValue(newValue: V): V {
+        val oldValue = map[key]
+        map[key] = value
+        return oldValue!!
+    }
 }
