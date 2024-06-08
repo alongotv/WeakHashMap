@@ -5,7 +5,13 @@ import platform.Foundation.allObjects
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING", "unused")
 actual class WeakHashMap<K, V> {
 
+    /** When the key is released, retained value should be released shortly
+     * after the MapTable is resized
+     * @see <a href="https://developer.apple.com/library/archive/releasenotes/Foundation/RN-FoundationOlderNotes/#//apple_ref/doc/uid/TP40008080-TRANSLATED_CHAPTER_965-TRANSLATED_DEST_999B">Mountain Lion Documentation</a> explaining this behavior
+     * (NSMapTable zeroing weak changes)
+     **/
     private val mapTable: NSMapTable = NSMapTable.weakToStrongObjectsMapTable()
+
     actual val size: Int
         get() = mapTable.count().toInt()
 
