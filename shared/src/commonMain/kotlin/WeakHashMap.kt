@@ -1,5 +1,5 @@
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-expect class WeakHashMap<K, V> {
+expect class WeakHashMap<K, V>() {
     val entries: MutableSet<MutableEntry<K, V>>
     val keys: MutableSet<K>
     val size: Int
