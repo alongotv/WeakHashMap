@@ -3,8 +3,8 @@ plugins {
 }
 
 kotlin {
+    applyDefaultHierarchyTemplate()
     jvm()
-
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,7 +25,7 @@ kotlin {
         }
 
         // region Apple main targets
-        appleMain {
+        val appleMain by getting {
             dependsOn(commonMain)
         }
 
@@ -36,16 +36,15 @@ kotlin {
         val macosArm64Main by getting
 
         iosMain {
-            dependsOn(appleMain.get())
+            dependsOn(appleMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             macosX64Main.dependsOn(this)
             macosArm64Main.dependsOn(this)
-
         }
         macosMain {
-            dependsOn(appleMain.get())
+            dependsOn(appleMain)
         }
         // endregion
 
@@ -58,8 +57,8 @@ kotlin {
             }
         }
         appleTest {
-            dependsOn(appleMain.get())
             dependsOn(commonTest)
+            dependsOn(appleMain)
         }
         jvmTest {
             dependsOn(commonTest)
