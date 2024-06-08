@@ -50,7 +50,7 @@ actual class WeakHashMap<K, V> {
     }
 
     actual operator fun set(key: K, value: V): V? {
-        val prev = mapTable.objectForKey(key) as? V
+        val prev = mapTable.objectForKey(key) as V?
         mapTable.setObject(key, value)
         return prev
     }
@@ -60,10 +60,10 @@ actual class WeakHashMap<K, V> {
     }
 
     actual fun containsValue(value: V): Boolean {
-        TODO("Not yet implemented")
+        return mapTable.objectEnumerator()?.allObjects()?.contains(value) == true
     }
 
     actual fun containsKey(key: K): Boolean {
-        TODO("Not yet implemented")
+        return mapTable.keyEnumerator().allObjects().contains(key)
     }
 }
