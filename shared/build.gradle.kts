@@ -49,11 +49,15 @@ kotlin {
         // endregion
 
         commonTest {
+            dependsOn(commonMain.get())
             dependencies {
-                kotlin("test")
+                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
             }
         }
         appleTest {
+            dependsOn(appleMain.get())
             dependsOn(commonTest.get())
         }
         jvmTest {
