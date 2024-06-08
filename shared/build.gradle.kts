@@ -19,13 +19,14 @@ kotlin {
     }
 
     sourceSets {
+        val commonMain by getting
         jvmMain {
-            dependsOn(commonMain.get())
+            dependsOn(commonMain)
         }
 
         // region Apple main targets
         appleMain {
-            dependsOn(commonMain.get())
+            dependsOn(commonMain)
         }
 
         val iosX64Main by getting
@@ -48,8 +49,8 @@ kotlin {
         }
         // endregion
 
-        commonTest {
-            dependsOn(commonMain.get())
+        val commonTest by getting {
+            dependsOn(commonMain)
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-common"))
@@ -58,10 +59,10 @@ kotlin {
         }
         appleTest {
             dependsOn(appleMain.get())
-            dependsOn(commonTest.get())
+            dependsOn(commonTest)
         }
         jvmTest {
-            dependsOn(commonTest.get())
+            dependsOn(commonTest)
         }
     }
 }
