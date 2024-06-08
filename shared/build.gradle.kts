@@ -8,17 +8,34 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
+        iosSimulatorArm64(),
+        macosX64(),
+        macosArm64()
+    ).forEach { appleTarget ->
+        appleTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        commonMain.dependencies {
-            // put your Multiplatform dependencies here
+        appleMain {
+            dependsOn(commonMain.get())
+        }
+        jvmMain {
+            dependsOn(commonMain.get())
+        }
+        commonTest {
+            dependencies {
+                kotlin("test-common")
+                kotlin("test-annotations-common")
+            }
+        }
+        appleTest {
+            dependsOn(commonTest.get())
+        }
+        jvmTest {
+            dependsOn(commonTest.get())
         }
     }
 }
