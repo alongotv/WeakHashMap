@@ -19,16 +19,38 @@ kotlin {
     }
 
     sourceSets {
-        appleMain {
-            dependsOn(commonMain.get())
-        }
         jvmMain {
             dependsOn(commonMain.get())
         }
+
+        // region Apple main targets
+        appleMain {
+            dependsOn(commonMain.get())
+        }
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val macosX64Main by getting
+        val macosArm64Main by getting
+
+        iosMain {
+            dependsOn(appleMain.get())
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            macosX64Main.dependsOn(this)
+            macosArm64Main.dependsOn(this)
+
+        }
+        macosMain {
+            dependsOn(appleMain.get())
+        }
+        // endregion
+
         commonTest {
             dependencies {
-                kotlin("test-common")
-                kotlin("test-annotations-common")
+                kotlin("test")
             }
         }
         appleTest {
