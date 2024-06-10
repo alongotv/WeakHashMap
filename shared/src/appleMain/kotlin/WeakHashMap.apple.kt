@@ -47,7 +47,7 @@ actual class WeakHashMap<K, V> {
 
     actual fun remove(key: K): V? {
         val oldValue = mapTable.objectForKey(key) as V?
-        mapTable.removeObjectForKey(key)
+        mapTable.removeObjectForKey(aKey = key)
         return oldValue
     }
 
@@ -59,12 +59,12 @@ actual class WeakHashMap<K, V> {
 
     actual operator fun set(key: K, value: V): V? {
         val prev = mapTable.objectForKey(key) as V?
-        mapTable.setObject(key, value)
+        mapTable.setObject(anObject = value, forKey = key)
         return prev
     }
 
     actual operator fun get(key: K): V? {
-        return mapTable.objectForKey(key) as V?
+        return mapTable.objectForKey(aKey = key) as V?
     }
 
     actual fun containsValue(value: V): Boolean {
