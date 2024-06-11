@@ -6,6 +6,7 @@ import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class WeakHashMapTestApple {
@@ -42,7 +43,7 @@ class WeakHashMapTestApple {
 
     @Test
     fun `test no values with strong keys deallocated`() = runBlocking {
-
+        // Prepare
         testIds.forEach {
             weakHashMap[it] = Any()
         }
@@ -50,6 +51,22 @@ class WeakHashMapTestApple {
         assertTrue { weakHashMap.containsKey(testIds.first()) }
         assertTrue { weakHashMap.containsKey(testIds.last()) }
         assertEquals(expected = testIds.size, actual = weakHashMap.size)
+    }
+
+    @Test
+    fun `test all values with strong keys deallocated after clear called`() = runBlocking {
+        // Prepare
+        testIds.forEach {
+            weakHashMap[it] = Any()
+        }
+
+        // Do
+        weakHashMap.clear()
+
+        // Check
+        assertFalse { weakHashMap.containsKey(testIds.first()) }
+        assertFalse { weakHashMap.containsKey(testIds.last()) }
+        assertEquals(expected = 0, actual = weakHashMap.size)
     }
 }
 
