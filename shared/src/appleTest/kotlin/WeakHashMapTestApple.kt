@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 class WeakHashMapTestApple {
     private var weakHashMap = WeakHashMap<IntContainer, Any>()
 
-    private val testIds = (100001..maxHashMapSize).map(::IntContainer)
+    private val strongRefIds = (100001..maxHashMapSize).map(::IntContainer)
 
     @OptIn(NativeRuntimeApi::class)
     @BeforeTest
@@ -22,51 +22,64 @@ class WeakHashMapTestApple {
         delay(100)
     }
 
-    @OptIn(BetaInteropApi::class)
     @Test
     fun `test at least one autoreleased value is deallocated after map resizing`() = runBlocking {
+
+        // Prepare
+        fillMapWithAutoReleasedValues()
+        fillMapWithStrongRefValues()
+
+        // Check
+        assertTrue { weakHashMap.containsKey(strongRefIds.first()) }
+        assertTrue { weakHashMap.containsKey(strongRefIds.last()) }
+        assertTrue { weakHashMap.size < maxHashMapSize }
+    }
+
+    @Test
+    fun `test no values with strong keys deallocated`() = runBlocking {
+
+        // Prepare
+        fillMapWithStrongRefValues()
+
+        // Check
+        assertTrue { weakHashMap.containsKey(strongRefIds.first()) }
+        assertTrue { weakHashMap.containsKey(strongRefIds.last()) }
+        assertEquals(expected = strongRefIds.size, actual = weakHashMap.size)
+    }
+
+    @Test
+    fun `test all values with strong keys deallocated after clear called`() = runBlocking {
+
+        // Prepare
+        fillMapWithStrongRefValues()
+
+        // Do
+        weakHashMap.clear()
+
+        // Check
+        assertFalse { weakHashMap.containsKey(strongRefIds.first()) }
+        assertFalse { weakHashMap.containsKey(strongRefIds.last()) }
+        assertEquals(expected = 0, actual = weakHashMap.size)
+    }
+
+    private fun fillMapWithStrongRefValues() {
+        strongRefIds.forEach {
+            weakHashMap[it] = Any()
+        }
+    }
+
+    /**
+     * Note: autoreleasepool is used for testing purposes here,
+     * in production code obsolete object collection should be handled by Kotlin/Native GC
+     **/
+    @OptIn(BetaInteropApi::class)
+    private fun fillMapWithAutoReleasedValues() {
         autoreleasepool {
             repeat(100000) {
                 val intContainer = IntContainer(it)
                 weakHashMap[intContainer] = Any()
             }
         }
-
-        testIds.forEach {
-            weakHashMap[it] = Any()
-        }
-
-        assertTrue { weakHashMap.containsKey(testIds.first()) }
-        assertTrue { weakHashMap.containsKey(testIds.last()) }
-        assertTrue { weakHashMap.size < maxHashMapSize }
-    }
-
-    @Test
-    fun `test no values with strong keys deallocated`() = runBlocking {
-        // Prepare
-        testIds.forEach {
-            weakHashMap[it] = Any()
-        }
-
-        assertTrue { weakHashMap.containsKey(testIds.first()) }
-        assertTrue { weakHashMap.containsKey(testIds.last()) }
-        assertEquals(expected = testIds.size, actual = weakHashMap.size)
-    }
-
-    @Test
-    fun `test all values with strong keys deallocated after clear called`() = runBlocking {
-        // Prepare
-        testIds.forEach {
-            weakHashMap[it] = Any()
-        }
-
-        // Do
-        weakHashMap.clear()
-
-        // Check
-        assertFalse { weakHashMap.containsKey(testIds.first()) }
-        assertFalse { weakHashMap.containsKey(testIds.last()) }
-        assertEquals(expected = 0, actual = weakHashMap.size)
     }
 }
 
