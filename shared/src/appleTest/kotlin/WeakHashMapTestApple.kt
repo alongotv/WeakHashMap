@@ -6,6 +6,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class WeakHashMapTestApple {
@@ -59,6 +60,24 @@ class WeakHashMapTestApple {
         assertFalse { weakHashMap.containsKey(strongRefIds.last()) }
         assertEquals(expected = 0, actual = weakHashMap.size)
     }
+
+    @Test
+    fun `test value with strong key deallocated after remove called`() = runBlocking {
+
+        // Prepare
+        fillMapWithStrongRefValues()
+
+        val old = weakHashMap[strongRefIds.first()]
+        assertNotNull(old)
+
+        weakHashMap.remove(strongRefIds.first())
+
+        // Check
+        assertFalse { weakHashMap.containsKey(strongRefIds.first()) }
+        assertFalse { weakHashMap.containsValue(old) }
+        assertEquals(expected = strongRefIds.size - 1, actual = weakHashMap.size)
+    }
+
 
     private fun fillMapWithStrongRefValues() {
         strongRefIds.forEach {
