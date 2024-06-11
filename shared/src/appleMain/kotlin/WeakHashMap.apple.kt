@@ -1,5 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
+import kotlinx.cinterop.autoreleasepool
 import platform.Foundation.NSMapTable
 import platform.Foundation.allObjects
 
@@ -12,7 +13,9 @@ actual class WeakHashMap<K, V> {
      * @see <a href="https://developer.apple.com/library/archive/releasenotes/Foundation/RN-FoundationOlderNotes/#//apple_ref/doc/uid/TP40008080-TRANSLATED_CHAPTER_965-TRANSLATED_DEST_999B">Mountain Lion Documentation</a> explaining this behavior
      * (NSMapTable zeroing weak changes)
      **/
-    private val mapTable: NSMapTable = NSMapTable.weakToStrongObjectsMapTable()
+    private val mapTable: NSMapTable = autoreleasepool {
+        NSMapTable.strongToWeakObjectsMapTable()
+    }
 
     actual val size: Int
         get() = mapTable.count().toInt()
@@ -58,7 +61,9 @@ actual class WeakHashMap<K, V> {
     }
 
     actual operator fun set(key: K, value: V): V? {
-        val prev = mapTable.objectForKey(key) as V?
+        val prev = autoreleasepool {
+            mapTable.objectForKey(key) as V?
+        }
         mapTable.setObject(anObject = value, forKey = key)
         return prev
     }
