@@ -87,7 +87,7 @@ class WeakHashMapTestApple {
 
     /**
      * Note: autoreleasepool is used for testing purposes here,
-     * in production code obsolete object collection should be handled by Kotlin/Native GC
+     * in production code obsolete object collection will be handled by Kotlin/Native GC
      **/
     @OptIn(BetaInteropApi::class)
     private fun fillMapWithAutoReleasedValues() {
@@ -100,6 +100,7 @@ class WeakHashMapTestApple {
     }
 }
 
+// The max is here for testing purposes, in real tasks hashmap could exceed this size
 private const val maxHashMapSize = 300000
 
 data class IntContainer(val i: Int)
