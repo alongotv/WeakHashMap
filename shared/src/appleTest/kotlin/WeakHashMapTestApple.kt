@@ -21,6 +21,9 @@ class WeakHashMapTestApple {
         kotlin.native.runtime.GC.collect()
     }
 
+
+    // There is no guarantee WHEN the underlying NSMapTable will deallocate values after keys
+    // If at least one value has been deallocated, it is counted as a success
     @Test
     fun `test at least one autoreleased value is deallocated after map resizing`() = runBlocking {
 
