@@ -1,6 +1,8 @@
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.autoreleasepool
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,9 +13,12 @@ class WeakHashMapTestApple {
 
     private val testIds = (100001..maxHashMapSize).map(::IntContainer)
 
+    @OptIn(NativeRuntimeApi::class)
     @BeforeTest
-    fun setup() {
+    fun setup(): Unit = runBlocking {
         weakHashMap = WeakHashMap()
+        kotlin.native.runtime.GC.collect()
+        delay(100)
     }
 
     @OptIn(BetaInteropApi::class)
