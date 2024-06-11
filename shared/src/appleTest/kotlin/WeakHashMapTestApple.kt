@@ -46,7 +46,6 @@ class WeakHashMapTestApple {
         testIds.forEach {
             weakHashMap[it] = Any()
         }
-        println(weakHashMap.size)
 
         assertTrue { weakHashMap.containsKey(testIds.first()) }
         assertTrue { weakHashMap.containsKey(testIds.last()) }
