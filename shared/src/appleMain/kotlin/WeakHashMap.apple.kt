@@ -14,7 +14,7 @@ actual class WeakHashMap<K, V> {
      * (NSMapTable zeroing weak changes)
      **/
     private val mapTable: NSMapTable = autoreleasepool {
-        NSMapTable.strongToWeakObjectsMapTable()
+        NSMapTable.weakToStrongObjectsMapTable()
     }
 
     actual val size: Int
