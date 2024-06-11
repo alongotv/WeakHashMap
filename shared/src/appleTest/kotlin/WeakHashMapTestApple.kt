@@ -1,6 +1,5 @@
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.autoreleasepool
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.test.BeforeTest
@@ -19,7 +18,6 @@ class WeakHashMapTestApple {
     fun setup(): Unit = runBlocking {
         weakHashMap = WeakHashMap()
         kotlin.native.runtime.GC.collect()
-        delay(100)
     }
 
     @Test
