@@ -13,5 +13,5 @@ The scheme below shows an approximate architecture of
 the WeakHashMap.
 ![example](./img/weakhashmap_scheme.png)
 
-When **Key Bearer Class** is collected by Garbage Collector, the **Key Object** and **Value Object** will get deallocated too, provided
+When **Key Bearer Class** is collected by Garbage Collector, the **Key Object** and **Value Object** will get removed from WeakHashMap and deallocated too, provided
 that **Key Object** has not been retained by some other object.
