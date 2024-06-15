@@ -78,7 +78,7 @@ actual class WeakHashMap<K : Any, V> {
 
     private fun expungeStaleEntries() {
         hashMap.keys
-            .filter { !it.isAvailable }
+            .filterNot { it.isAvailable }
             .forEach {
                 hashMap.remove(it)
             }
