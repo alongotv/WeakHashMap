@@ -1,5 +1,7 @@
+package com.alongo
+
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-expect class WeakHashMap<K, V>() {
+expect class WeakHashMap<K: Any, V>() {
     val entries: MutableSet<MutableEntry<K, V>>
     val keys: MutableSet<K>
     val size: Int
@@ -18,7 +20,7 @@ expect class WeakHashMap<K, V>() {
     fun remove(key: K): V?
 }
 
-class MutableEntry<K, V>(private val map: WeakHashMap<K, V>, override val key: K, override val value: V) : MutableMap.MutableEntry<K, V> {
+class MutableEntry<K: Any, V>(private val map: WeakHashMap<K, V>, override val key: K, override val value: V) : MutableMap.MutableEntry<K, V> {
     override fun setValue(newValue: V): V {
         val oldValue = map[key]
         map[key] = value
