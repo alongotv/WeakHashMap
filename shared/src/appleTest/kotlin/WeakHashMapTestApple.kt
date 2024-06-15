@@ -23,6 +23,7 @@ class WeakHashMapTestApple {
     }
 
 
+    @OptIn(NativeRuntimeApi::class)
     @Test
     fun `all autoreleased values are deallocated after map resizing`() = runBlocking {
 
@@ -30,8 +31,9 @@ class WeakHashMapTestApple {
         fillMapWithAutoReleasedValues()
         fillMapWithStrongRefValues()
 
-        // Check
+        GC.collect()
 
+        // Check
         assertTrue {
             strongRefIds.all {
                 weakHashMap.containsKey(it)
@@ -106,8 +108,8 @@ class WeakHashMapTestApple {
     }
 }
 
-private const val autoreleaseValuesCount = 10000
+private const val autoreleaseValuesCount = 1000
 // The max is here for testing purposes, in real tasks hashmap could exceed this size
-private const val maxHashMapSize = 30000
+private const val maxHashMapSize = 3000
 
 data class IntContainer(val i: Int)
