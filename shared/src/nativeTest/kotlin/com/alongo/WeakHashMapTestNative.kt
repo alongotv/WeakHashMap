@@ -25,22 +25,23 @@ class WeakHashMapTestNative {
 
     @OptIn(NativeRuntimeApi::class)
     @Test
-    fun `all autoreleased values are deallocated and strong referred objs are retained`() = runBlocking {
+    fun `all autoreleased values are deallocated and strong referred objs are retained`() =
+        runBlocking {
 
-        // Prepare
-        fillMapWithAutoReleasedValues()
-        fillMapWithStrongRefValues()
+            // Prepare
+            fillMapWithAutoReleasedValues()
+            fillMapWithStrongRefValues()
 
-        GC.collect()
+            GC.collect()
 
-        // Check
-        assertTrue {
-            strongRefIds.all {
-                weakHashMap.containsKey(it)
+            // Check
+            assertTrue {
+                strongRefIds.all {
+                    weakHashMap.containsKey(it)
+                }
             }
+            assertEquals(strongRefIds.size, weakHashMap.size)
         }
-        assertEquals(strongRefIds.size, weakHashMap.size)
-    }
 
     @Test
     fun `test no values with strong keys are deallocated`() = runBlocking {
@@ -113,7 +114,7 @@ class WeakHashMapTestNative {
      * In order for object to be garbage collected, parent function where the object has been created
      * has to complete its execution. It is also true for using the WeakHashMap in production code.
      * Therefore, we have to move logic that fills map with values to a separate function.
-    **/
+     **/
     private fun fillMapWithAutoReleasedValues() {
         repeat(autoreleaseValuesCount) {
             val intContainer = IntContainer(it)
