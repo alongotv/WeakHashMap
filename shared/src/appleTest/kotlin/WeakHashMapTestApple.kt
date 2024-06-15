@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 class WeakHashMapTestApple {
     private var weakHashMap = WeakHashMap<IntContainer, Any>()
 
-    private val strongRefIds = (10001..maxHashMapSize).map(::IntContainer)
+    private val strongRefIds = (autoreleaseValuesCount.inc()..maxHashMapSize).map(::IntContainer)
 
     @OptIn(NativeRuntimeApi::class)
     @BeforeTest
@@ -81,7 +81,7 @@ class WeakHashMapTestApple {
         // Check
         assertFalse { weakHashMap.containsKey(strongRefIds.first()) }
         assertFalse { weakHashMap.containsValue(old) }
-        assertEquals(expected = strongRefIds.size - 1, actual = weakHashMap.size)
+        assertEquals(expected = strongRefIds.size.dec(), actual = weakHashMap.size)
     }
 
 
@@ -98,7 +98,7 @@ class WeakHashMapTestApple {
     @OptIn(BetaInteropApi::class)
     private fun fillMapWithAutoReleasedValues() {
         autoreleasepool {
-            repeat(10000) {
+            repeat(autoreleaseValuesCount) {
                 val intContainer = IntContainer(it)
                 weakHashMap[intContainer] = Any()
             }
@@ -106,6 +106,7 @@ class WeakHashMapTestApple {
     }
 }
 
+private const val autoreleaseValuesCount = 10000
 // The max is here for testing purposes, in real tasks hashmap could exceed this size
 private const val maxHashMapSize = 30000
 
