@@ -82,6 +82,7 @@ class WeakHashMapTestNative {
         val old = weakHashMap[strongRefIds.first()]
         assertNotNull(old)
 
+        // Do
         weakHashMap.remove(strongRefIds.first())
 
         // Check
@@ -111,8 +112,10 @@ class WeakHashMapTestNative {
     }
 
     /**
+     * Regarding Kotlin/Native GC:
      * In order for object to be garbage collected, parent function where the object has been created
-     * has to complete its execution. It is also true for using the WeakHashMap in production code.
+     * has to complete its execution. (even if this object has been replaced with a null)
+     * Mind that's also true for using the WeakHashMap in production code.
      * Therefore, we have to move logic that fills map with values to a separate function.
      **/
     private fun fillMapWithAutoReleasedValues() {
