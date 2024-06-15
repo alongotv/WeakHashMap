@@ -63,17 +63,13 @@ actual class WeakHashMap<K : Any, V> {
     }
 
     actual fun containsValue(value: V): Boolean {
-        return hashMap.values.any {
-            it == value
-        }
+        return hashMap.containsValue(value)
     }
 
     actual fun containsKey(key: K): Boolean {
         clean()
         val k = Key(key)
-        return hashMap.keys.any {
-            it == k
-        }
+        return hashMap.containsKey(k)
     }
 
     private fun clean() {
