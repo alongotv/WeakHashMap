@@ -109,6 +109,11 @@ class WeakHashMapTestNative {
         }
     }
 
+    /**
+     * In order for object to be garbage collected, parent function where the object has been created
+     * has to complete its execution. It is also true for using the WeakHashMap in production code.
+     * Therefore, we have to move logic that fills map with values to a separate function.
+    **/
     private fun fillMapWithAutoReleasedValues() {
         repeat(autoreleaseValuesCount) {
             val intContainer = IntContainer(it)
