@@ -2,7 +2,7 @@ package com.alongo
 
 import java.util.WeakHashMap
 
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING", "unused")
 actual class WeakHashMap<K: Any, V> {
     private val weakHashMap = WeakHashMap<K, V>()
 
