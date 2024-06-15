@@ -8,6 +8,11 @@ actual class WeakHashMap<K : Any, V> {
 
     private val hashMap = hashMapOf<Key<K>, V>()
 
+    private fun getMapInstance(): HashMap<Key<K>, V> {
+        expungeStaleEntries()
+        return hashMap
+    }
+
     actual val size: Int
         get() {
             if (hashMap.size == 0) return 0
@@ -51,15 +56,17 @@ actual class WeakHashMap<K : Any, V> {
     }
 
     actual operator fun set(key: K, value: V): V? {
+        val map = getMapInstance()
         val k = Key(key)
-        val prev = hashMap[k]
-        hashMap[k] = value
+        val prev = map[k]
+        map[k] = value
         return prev
     }
 
     actual operator fun get(key: K): V? {
+        val map = getMapInstance()
         val k = Key(key)
-        return hashMap[k]
+        return map[k]
     }
 
     actual fun containsValue(value: V): Boolean {
@@ -67,9 +74,9 @@ actual class WeakHashMap<K : Any, V> {
     }
 
     actual fun containsKey(key: K): Boolean {
-        expungeStaleEntries()
+        val map = getMapInstance()
         val k = Key(key)
-        return hashMap.containsKey(k)
+        return map.containsKey(k)
     }
 
     private fun expungeStaleEntries() {
