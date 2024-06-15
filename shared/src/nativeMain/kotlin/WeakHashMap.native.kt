@@ -10,8 +10,9 @@ actual class WeakHashMap<K : Any, V> {
 
     actual val size: Int
         get() {
+            if (hashMap.size == 0) return 0
             expungeStaleEntries()
-            return hashMap.count()
+            return hashMap.size
         }
 
     actual val entries: MutableSet<MutableEntry<K, V>>
