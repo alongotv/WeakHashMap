@@ -31,17 +31,13 @@ actual class WeakHashMap<K : Any, V> {
         }
 
     actual val values: MutableCollection<V>
-        get() {
-            return hashMap.values
-        }
+        get() = hashMap.values
 
     actual fun clear() {
         hashMap.clear()
     }
 
-    actual fun isEmpty(): Boolean {
-        return hashMap.isEmpty()
-    }
+    actual fun isEmpty(): Boolean = hashMap.isEmpty()
 
     actual fun remove(key: K): V? {
         val k = Key(key)
