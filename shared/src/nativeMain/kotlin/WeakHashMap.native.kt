@@ -99,7 +99,7 @@ private class Key<K : Any>(key: K) {
         return ref.value == other.ref.value
     }
 
-    internal fun getValue() = ref.value
+    fun getValue() = ref.value
 
     override fun hashCode(): Int = hash
 }
