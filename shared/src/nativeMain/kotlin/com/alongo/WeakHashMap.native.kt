@@ -52,9 +52,10 @@ actual class WeakHashMap<K : Any, V> {
     }
 
     actual fun putAll(from: Map<out K, V>) {
-        from.forEach { (key, value) ->
-            set(key, value)
+        val mapWithWeakKey = from.map {
+            Key(it.key) to it.value
         }
+        hashMap.putAll(mapWithWeakKey)
     }
 
     actual operator fun set(key: K, value: V): V? {
