@@ -1,3 +1,7 @@
+package com.alongo
+
+import IntContainer
+import WeakHashMap
 import kotlinx.coroutines.runBlocking
 import kotlin.native.runtime.GC
 import kotlin.native.runtime.NativeRuntimeApi
@@ -8,7 +12,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class WeakHashMapTestApple {
+class WeakHashMapTestNative {
     private var weakHashMap = WeakHashMap<IntContainer, Any>()
 
     private val strongRefIds = (autoreleaseValuesCount.inc()..maxHashMapSize).map(::IntContainer)
