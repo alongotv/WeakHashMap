@@ -93,7 +93,7 @@ class WeakHashMapTestNative {
 
     @OptIn(NativeRuntimeApi::class)
     @Test
-    fun `map is empty after the all keys are deallocated`() = runBlocking {
+    fun `map contains no keys after all key objects are deallocated`() = runBlocking {
 
         // Prepare
         fillMapWithAutoReleasedValues()
