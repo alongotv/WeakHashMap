@@ -22,7 +22,6 @@ class WeakHashMapTestNative {
         GC.collect()
     }
 
-
     @OptIn(NativeRuntimeApi::class)
     @Test
     fun `all autoreleased values are deallocated and strongly referred objs are retained`() =
