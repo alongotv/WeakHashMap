@@ -9,7 +9,10 @@ actual class WeakHashMap<K : Any, V> {
     private val hashMap = hashMapOf<Key<K>, V>()
 
     actual val size: Int
-        get() = hashMap.count()
+        get() {
+            expungeStaleEntries()
+            return hashMap.count()
+        }
 
     actual val entries: MutableSet<MutableEntry<K, V>>
         get() {
@@ -67,12 +70,12 @@ actual class WeakHashMap<K : Any, V> {
     }
 
     actual fun containsKey(key: K): Boolean {
-        clean()
+        expungeStaleEntries()
         val k = Key(key)
         return hashMap.containsKey(k)
     }
 
-    private fun clean() {
+    private fun expungeStaleEntries() {
         hashMap.keys
             .filter { !it.isAvailable }
             .forEach {
