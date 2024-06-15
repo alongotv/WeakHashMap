@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WeakHashMapTest {
+class WeakHashMapTestJvm {
 
     private val weakHashMap = WeakHashMap<IntContainer, Any>()
 
