@@ -1,5 +1,6 @@
-This is a WIP Kotlin Multiplatform project targeting Apple platforms, JVM.
+This is a Kotlin Multiplatform project targeting Native platforms, JVM.
 
-WeakHashMap is a data structure, where value gets deallocated after the key is deallocated.
+WeakHashMap is a key-value data structure, where value gets deallocated after the key is deallocated.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+This is a substitute to be used until [ticket](https://youtrack.jetbrains.com/issue/KT-48075) for
+adding WeakHashMap to Kotlin's stdlib is resolved.
