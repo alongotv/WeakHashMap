@@ -25,7 +25,7 @@ class WeakHashMapTestNative {
 
     @OptIn(NativeRuntimeApi::class)
     @Test
-    fun `all autoreleased values are deallocated and strong referred objs are retained`() =
+    fun `all autoreleased values are deallocated and strongly referred objs are retained`() =
         runBlocking {
 
             // Prepare
