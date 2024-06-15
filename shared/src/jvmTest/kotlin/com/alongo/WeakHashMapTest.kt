@@ -1,3 +1,5 @@
+package com.alongo
+
 import kotlinx.coroutines.runBlocking
 import java.lang.ref.WeakReference
 import kotlin.test.Test

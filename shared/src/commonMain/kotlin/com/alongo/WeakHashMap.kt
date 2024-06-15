@@ -1,3 +1,5 @@
+package com.alongo
+
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 expect class WeakHashMap<K: Any, V>() {
     val entries: MutableSet<MutableEntry<K, V>>
