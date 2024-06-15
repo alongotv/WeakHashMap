@@ -64,8 +64,11 @@ class WeakHashMapTestApple {
         weakHashMap.clear()
 
         // Check
-        assertFalse { weakHashMap.containsKey(strongRefIds.first()) }
-        assertFalse { weakHashMap.containsKey(strongRefIds.last()) }
+        assertFalse {
+            strongRefIds.all {
+                weakHashMap.containsKey(it)
+            }
+        }
         assertEquals(expected = 0, actual = weakHashMap.size)
     }
 
@@ -109,7 +112,6 @@ class WeakHashMapTestApple {
 }
 
 private const val autoreleaseValuesCount = 1000
+
 // The max is here for testing purposes, in real tasks hashmap could exceed this size
 private const val maxHashMapSize = 3000
-
-data class IntContainer(val i: Int)
