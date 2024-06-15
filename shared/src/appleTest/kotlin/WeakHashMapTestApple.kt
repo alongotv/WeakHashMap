@@ -1,6 +1,7 @@
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.autoreleasepool
 import kotlinx.coroutines.runBlocking
+import kotlin.native.runtime.GC
 import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -12,29 +13,31 @@ import kotlin.test.assertTrue
 class WeakHashMapTestApple {
     private var weakHashMap = WeakHashMap<IntContainer, Any>()
 
-    private val strongRefIds = (100001..maxHashMapSize).map(::IntContainer)
+    private val strongRefIds = (10001..maxHashMapSize).map(::IntContainer)
 
     @OptIn(NativeRuntimeApi::class)
     @BeforeTest
     fun setup(): Unit = runBlocking {
         weakHashMap = WeakHashMap()
-        kotlin.native.runtime.GC.collect()
+        GC.collect()
     }
 
 
-    // There is no guarantee WHEN the underlying NSMapTable will deallocate values after keys
-    // If at least one value has been deallocated, it is counted as a success
     @Test
-    fun `test at least one autoreleased value is deallocated after map resizing`() = runBlocking {
+    fun `all autoreleased values are deallocated after map resizing`() = runBlocking {
 
         // Prepare
         fillMapWithAutoReleasedValues()
         fillMapWithStrongRefValues()
 
         // Check
-        assertTrue { weakHashMap.containsKey(strongRefIds.first()) }
-        assertTrue { weakHashMap.containsKey(strongRefIds.last()) }
-        assertTrue { weakHashMap.size < maxHashMapSize }
+
+        assertTrue {
+            strongRefIds.all {
+                weakHashMap.containsKey(it)
+            }
+        }
+        assertEquals(strongRefIds.size, weakHashMap.size)
     }
 
     @Test
@@ -95,7 +98,7 @@ class WeakHashMapTestApple {
     @OptIn(BetaInteropApi::class)
     private fun fillMapWithAutoReleasedValues() {
         autoreleasepool {
-            repeat(100000) {
+            repeat(10000) {
                 val intContainer = IntContainer(it)
                 weakHashMap[intContainer] = Any()
             }
@@ -104,6 +107,6 @@ class WeakHashMapTestApple {
 }
 
 // The max is here for testing purposes, in real tasks hashmap could exceed this size
-private const val maxHashMapSize = 300000
+private const val maxHashMapSize = 30000
 
 data class IntContainer(val i: Int)
