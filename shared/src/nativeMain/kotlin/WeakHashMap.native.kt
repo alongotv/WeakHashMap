@@ -30,7 +30,7 @@ actual class WeakHashMap<K : Any, V> {
 
     actual val keys: MutableSet<K>
         get() {
-            return hashMap.keys.mapNotNull {
+            return getMapInstance().keys.mapNotNull {
                 it.getValue()
             }.toMutableSet()
         }
