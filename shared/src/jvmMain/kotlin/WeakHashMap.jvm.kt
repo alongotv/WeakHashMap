@@ -1,7 +1,7 @@
 import java.util.WeakHashMap
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual class WeakHashMap<K, V> {
+actual class WeakHashMap<K: Any, V> {
     private val weakHashMap = WeakHashMap<K, V>()
 
     actual val entries: MutableSet<MutableEntry<K, V>>
