@@ -1,5 +1,3 @@
-import kotlinx.cinterop.BetaInteropApi
-import kotlinx.cinterop.autoreleasepool
 import kotlinx.coroutines.runBlocking
 import kotlin.native.runtime.GC
 import kotlin.native.runtime.NativeRuntimeApi
@@ -25,7 +23,7 @@ class WeakHashMapTestApple {
 
     @OptIn(NativeRuntimeApi::class)
     @Test
-    fun `all autoreleased values are deallocated after map resizing`() = runBlocking {
+    fun `all autoreleased values are deallocated and strong referred objs are retained`() = runBlocking {
 
         // Prepare
         fillMapWithAutoReleasedValues()
@@ -43,7 +41,7 @@ class WeakHashMapTestApple {
     }
 
     @Test
-    fun `test no values with strong keys deallocated`() = runBlocking {
+    fun `test no values with strong keys are deallocated`() = runBlocking {
 
         // Prepare
         fillMapWithStrongRefValues()
@@ -89,6 +87,19 @@ class WeakHashMapTestApple {
         assertEquals(expected = strongRefIds.size.dec(), actual = weakHashMap.size)
     }
 
+    @OptIn(NativeRuntimeApi::class)
+    @Test
+    fun `map is empty after the all keys are deallocated`() = runBlocking {
+
+        // Prepare
+        fillMapWithAutoReleasedValues()
+
+        // Do
+        GC.collect()
+
+        // Check
+        assertEquals(emptySize, weakHashMap.keys.size)
+    }
 
     private fun fillMapWithStrongRefValues() {
         strongRefIds.forEach {
@@ -96,21 +107,15 @@ class WeakHashMapTestApple {
         }
     }
 
-    /**
-     * Note: autoreleasepool is used for testing purposes here,
-     * in production code obsolete object collection will be handled by Kotlin/Native GC
-     **/
-    @OptIn(BetaInteropApi::class)
     private fun fillMapWithAutoReleasedValues() {
-        autoreleasepool {
-            repeat(autoreleaseValuesCount) {
-                val intContainer = IntContainer(it)
-                weakHashMap[intContainer] = Any()
-            }
+        repeat(autoreleaseValuesCount) {
+            val intContainer = IntContainer(it)
+            weakHashMap[intContainer] = Any()
         }
     }
 }
 
+private const val emptySize = 0
 private const val autoreleaseValuesCount = 1000
 
 // The max is here for testing purposes, in real tasks hashmap could exceed this size
