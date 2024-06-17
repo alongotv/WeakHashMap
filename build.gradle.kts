@@ -3,3 +3,8 @@ plugins {
     // in each subproject's classloader
     alias(libs.plugins.kotlinMultiplatform) apply false
 }
+
+allprojects {
+    group = "io.github.alongotv"
+    version = "0.0.1-SNAPSHOT"
+}
