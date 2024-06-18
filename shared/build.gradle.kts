@@ -1,6 +1,8 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.28.0"
     id("signing")
 }
 
@@ -36,53 +38,34 @@ signing {
     sign(publishing.publications)
 }
 
-val nexusUsername = providers.gradleProperty("nexusUsername")
-val nexusPassword = providers.gradleProperty("nexusPassword")
-val emptyJavadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-}
+val nexusUsername = providers.gradleProperty("mavenCentralUsername")
+val nexusPassword = providers.gradleProperty("mavenCentralPassword")
 
-publishing {
-    publications {
-        publications.withType<MavenPublication>().configureEach {
-            val publication = this
-            val javadocJar = tasks.register("${publication.name}JavadocJar", Jar::class) {
-                archiveClassifier.set("javadoc")
-                archiveBaseName.set("${archiveBaseName.get()}-${publication.name}")
-            }
-            artifact(javadocJar)
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
 
-            pom {
-                name = "kotlin-multiplatform-weakhashmap"
-                description =
-                    "This library brings WeakHashMap support for JVM and Native targets of Kotlin Multiplatform."
-                url = "https://github.com/alongotv/WeakHashMap"
-                licenses {
-                    license {
-                        name = "The MIT License"
-                        url = "https://opensource.org/license/mit"
-                    }
-                }
-                developers {
-                    developer {
-                        id = "alongotv"
-                        name = "Vladimir Vetrov"
-                    }
-                }
-                scm {
-                    url = "https://github.com/alongotv/WeakHashMap"
-                }
+    coordinates("io.github.alongotv", "kotlin-multiplatform-weakhashmap", "0.0.1")
+
+    pom {
+        name = "kotlin-multiplatform-weakhashmap"
+        description =
+            "This library brings WeakHashMap support for JVM and Native targets of Kotlin Multiplatform."
+        url = "https://github.com/alongotv/WeakHashMap"
+        licenses {
+            license {
+                name = "The MIT License"
+                url = "https://opensource.org/license/mit"
             }
         }
-    }
-    repositories {
-        maven {
-            name = "OSSRH"
-            url = uri("https://central.sonatype.com/api/v1/publisher/upload")
-            credentials {
-                username = nexusUsername.get()
-                password = nexusPassword.get()
+        developers {
+            developer {
+                id = "alongotv"
+                name = "Vladimir Vetrov"
             }
+        }
+        scm {
+            url = "https://github.com/alongotv/WeakHashMap"
         }
     }
 }
