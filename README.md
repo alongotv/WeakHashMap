@@ -1,4 +1,4 @@
-# WeakHashMap KMP
+# WeakHashMap for Kotlin Multiplatform
 
 WeakHashMap is a key-value data structure, where value gets deallocated after the key is
 deallocated.
