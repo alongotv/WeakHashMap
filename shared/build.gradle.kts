@@ -38,9 +38,6 @@ signing {
     sign(publishing.publications)
 }
 
-val nexusUsername = providers.gradleProperty("mavenCentralUsername")
-val nexusPassword = providers.gradleProperty("mavenCentralPassword")
-
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
