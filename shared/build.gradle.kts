@@ -42,7 +42,11 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("io.github.alongotv", "kotlin-multiplatform-weakhashmap", "0.0.1")
+    coordinates(
+        "io.github.alongotv",
+        "kotlin-multiplatform-weakhashmap",
+        project.version.toString()
+    )
 
     pom {
         name = "kotlin-multiplatform-weakhashmap"
