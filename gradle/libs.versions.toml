@@ -1,5 +1,5 @@
 [versions]
-junit = "4.13.2"
+mavenPublish = "0.28.0"
 kotlin = "2.0.0"
 
 [libraries]
@@ -8,3 +8,4 @@ kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version
 
 [plugins]
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }

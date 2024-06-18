@@ -2,7 +2,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("com.vanniktech.maven.publish") version "0.28.0"
+    alias(libs.plugins.mavenPublish)
     id("signing")
 }
 
