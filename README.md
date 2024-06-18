@@ -1,4 +1,4 @@
-# WeakHashMap
+# WeakHashMap KMP
 
 WeakHashMap is a key-value data structure, where value gets deallocated after the key is
 deallocated.
