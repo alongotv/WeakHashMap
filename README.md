@@ -1,3 +1,4 @@
+[![WeakHashMap Code Validation and Testing](https://github.com/alongotv/WeakHashMap/actions/workflows/code_validation.yml/badge.svg)](https://github.com/alongotv/WeakHashMap/actions/workflows/code_validation.yml)
 # WeakHashMap for Kotlin Multiplatform
 
 WeakHashMap is a key-value data structure, where value gets deallocated after the key is
