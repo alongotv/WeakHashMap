@@ -1,8 +1,6 @@
 package com.alongo
 
 import kotlinx.coroutines.runBlocking
-import kotlin.native.runtime.GC
-import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,19 +8,17 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class WeakHashMapTestNative {
+class WeakHashMapTestCommon {
     private var weakHashMap = WeakHashMap<IntContainer, Any>()
 
     private val strongRefIds = (autoreleaseValuesCount.inc()..maxHashMapSize).map(::IntContainer)
 
-    @OptIn(NativeRuntimeApi::class)
     @BeforeTest
     fun setup(): Unit = runBlocking {
         weakHashMap = WeakHashMap()
-        GC.collect()
+        GCUtils.collect()
     }
 
-    @OptIn(NativeRuntimeApi::class)
     @Test
     fun `all autoreleased values are deallocated and strongly referred objs are retained`() =
         runBlocking {
@@ -31,7 +27,7 @@ class WeakHashMapTestNative {
             fillMapWithAutoReleasedValues()
             fillMapWithStrongRefValues()
 
-            GC.collect()
+            GCUtils.collect()
 
             // Check
             assertTrue {
@@ -90,7 +86,6 @@ class WeakHashMapTestNative {
         assertEquals(expected = strongRefIds.size.dec(), actual = weakHashMap.size)
     }
 
-    @OptIn(NativeRuntimeApi::class)
     @Test
     fun `map contains no keys after all key objects are deallocated`() = runBlocking {
 
@@ -98,7 +93,7 @@ class WeakHashMapTestNative {
         fillMapWithAutoReleasedValues()
 
         // Do
-        GC.collect()
+        GCUtils.collect()
 
         // Check
         assertEquals(emptySize, weakHashMap.keys.size)
