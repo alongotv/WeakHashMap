@@ -8,7 +8,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class WeakHashMapTestNative {
+class WeakHashMapTestCommon {
     private var weakHashMap = WeakHashMap<IntContainer, Any>()
 
     private val strongRefIds = (autoreleaseValuesCount.inc()..maxHashMapSize).map(::IntContainer)
