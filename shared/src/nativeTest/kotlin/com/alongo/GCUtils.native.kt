@@ -7,6 +7,8 @@ import kotlin.native.runtime.NativeRuntimeApi
 actual object GCUtils {
     @OptIn(NativeRuntimeApi::class)
     actual fun collect() {
+        // "Trigger new collection and wait for its completion."
+        // Unlike in JVM, no waiting needed
         GC.collect()
     }
 }
