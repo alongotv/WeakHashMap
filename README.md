@@ -5,6 +5,11 @@ WeakHashMap is a key-value data structure, where value gets deallocated after th
 deallocated.
 This data structure could come in handy, if you have short-lived objects to store in a Cache.
 
+> [!WARNING]
+> Please be advised that this project makes use of Experimental [(WeakReference)](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.native.ref/-weak-reference/) and Beta [(actual classes)](https://kotlinlang.org/docs/multiplatform-expect-actual.html) components of Kotlin.
+> More details on stability can be found [there](https://kotlinlang.org/docs/components-stability.html).
+
+
 ### Getting Started
 
 At the moment the project is targeting Apple platforms and JVM.
