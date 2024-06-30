@@ -9,18 +9,37 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
     jvm()
+
+    // region Apple
     listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
+        macosArm64(),
         macosX64(),
-        macosArm64()
+        iosX64(),
+        iosSimulatorArm64(),
+        iosArm64(),
+        watchosSimulatorArm64(),
+        watchosX64(),
+        watchosArm64(),
+        watchosDeviceArm64(),
+        tvosSimulatorArm64(),
+        tvosX64(),
+        tvosArm64(),
     ).forEach { appleTarget ->
         appleTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
         }
     }
+    // endregion
+
+    // region Linux
+    linuxX64()
+    linuxArm64()
+    // endregion
+
+    // region Windows
+    mingwX64()
+    // endregion
 
     sourceSets {
         val commonTest by getting {
