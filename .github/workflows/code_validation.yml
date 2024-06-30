@@ -45,6 +45,11 @@ jobs:
         name: Checkout repository
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 17
       - uses: gradle/actions/setup-gradle@v3
         name: Setup Gradle
       - name: Run Windows X64 unit tests with Gradle wrapper
